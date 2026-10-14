@@ -1,0 +1,22 @@
+[
+    {
+        "username": "admin",
+        "password": "admin123",
+        "role": "Administrator"
+    },
+    {
+        "username": "vet",
+        "password": "vet123",
+        "role": "Veterinarian"
+    },
+    {
+        "username": "owner",
+        "password": "owner123",
+        "role": "Pet Owner"
+    },
+    {
+        "username": "tanya",
+        "password": "123",
+        "role": "Veterinarian"
+    }
+]

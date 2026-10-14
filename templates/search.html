@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PetCare - Search Pets</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="petcare-logo">
+            <div class="logo-image">
+                <img src="{{ url_for('static', filename='petcare-logo.png') }}"
+                     onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\'font-size:35px;\'>🐾</span>';"
+                     alt="PetCare Logo">
+            </div>
+            <div class="logo-text">
+                <strong>PetCare</strong>
+                <small>Healthy Pets • Happy Lives</small>
+            </div>
+        </div>
+
+        <div class="sidebar-profile">
+            <div class="profile-icon">
+                {% if role == "Administrator" %}👨‍💼{% elif role == "Veterinarian" %}🧑‍⚕️{% else %}👤{% endif %}
+            </div>
+            <div class="profile-info">
+                <strong>{{ role }}</strong>
+                <small>{{ session["username"] }}</small>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+            <a href="/dashboard" class="sidebar-link"><span class="menu-icon">🏠</span><span>Dashboard</span></a>
+            <a href="/pets" class="sidebar-link"><span class="menu-icon">🐾</span><span>Manage Pets</span></a>
+            <a href="/search" class="sidebar-link active"><span class="menu-icon">🔍</span><span>Search Pets</span></a>
+            <a href="/appointments" class="sidebar-link"><span class="menu-icon">📅</span><span>Appointments</span></a>
+            {% if role == "Administrator" %}
+            <a href="/users" class="sidebar-link"><span class="menu-icon">👥</span><span>Manage Users</span></a>
+            {% endif %}
+            <a href="/requests" class="sidebar-link"><span class="menu-icon">📋</span><span>Requests</span></a>
+        </nav>
+
+        <div class="sidebar-logout">
+            <a href="/logout" class="sidebar-link logout-link"><span class="menu-icon">🚪</span><span>Logout</span></a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="dashboard-header">
+            <div>
+                <h1>🔍 Search Pet Records</h1>
+                <p>Filter records by pet name, species, or owner username.</p>
+            </div>
+            <div class="header-paw">🔍</div>
+        </div>
+
+        <!-- SEARCH FORM CARD -->
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2>🔎 Find a Pet</h2>
+                    <p>Enter any keyword below to filter.</p>
+                </div>
+            </div>
+
+            <form method="POST">
+                <div class="form-group">
+                    <label for="keyword">Search Keyword</label>
+                    <input type="text" id="keyword" name="keyword" placeholder="Enter pet name, species (e.g. Dog, Cat), or owner..." required autofocus>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">🔍 Search</button>
+                    <a href="/pets" class="btn btn-secondary">🐾 View All Pets</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- SEARCH RESULTS CARD -->
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2>🐾 Results</h2>
+                    <p>Pets matching your search keyword.</p>
+                </div>
+            </div>
+
+            {% if pets %}
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Pet Name</th>
+                            <th>Species</th>
+                            <th>Age</th>
+                            <th>Owner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pet in pets %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td><strong>🐾 {{ pet.get_name() }}</strong></td>
+                            <td>{{ pet.get_species() }}</td>
+                            <td>{{ pet.get_age() }} years</td>
+                            <td>👤 {{ pet.get_owner() }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">🔍</div>
+                <h3>No Pets Found</h3>
+                <p>No pet records match your query or you haven't searched yet.</p>
+            </div>
+            {% endif %}
+
+            <div class="actions" style="margin-top: 20px;">
+                <a href="/pets" class="btn btn-secondary">← Back to Pet Records</a>
+                <a href="/dashboard" class="btn btn-primary">🏠 Dashboard</a>
+            </div>
+        </div>
+    </main>
+
+</div>
+
+</body>
+</html>
